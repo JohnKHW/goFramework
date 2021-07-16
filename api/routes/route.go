@@ -17,8 +17,8 @@ func RouteInit() *gin.Engine {
 
 	user := r.Group("/user")
 	{
-		controllers.ResourceController(user, controllers.UserController())
-
+		controllers.ResourceController(user, controllers.NewUserController())
+		user.GET("/test", controllers.NewUserController().Test)
 	}
 
 	return r

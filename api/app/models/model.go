@@ -1,6 +1,6 @@
 package models
 
-type model struct {
+type Model struct {
 	name string
 	id   int64
 }

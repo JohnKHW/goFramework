@@ -1,21 +1,16 @@
-FROM golang:alpine AS builder
+FROM golang:1.16-alpine
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
-RUN mkdir /build
+WORKDIR /app
 
-WORKDIR /build
-
-COPY . .
+COPY go.mod go.sum ./
 
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -a -installsuffix cgo -o /go/bin/build
+COPY . .
 
+RUN go build -o main .
 
-FROM scratch
-
-COPY --from=builder /go/bin/build /go/bin/build
-
-ENTRYPOINT ["/go/bin/build"]
-
-EXPOSE 8081
+CMD ["./main"]

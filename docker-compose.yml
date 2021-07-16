@@ -1,6 +1,24 @@
-version: "1.0"
+version: "3.5"
+networks:
+  backend:
+      driver: bridge
 services:
-  go-api:
-    build: ./api
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: ecommerce-api
+    restart: always
     ports:
-      - 8081:8081
+      - '3001:3001'
+    networks:
+      - backend
+    depends_on: 
+      - redis
+  redis:
+    image: redis
+    ports:
+        - "6379:6379"
+    container_name: redis
+    networks:
+        - backend

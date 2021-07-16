@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type user struct {
+type User struct {
 	id          int       `xorm:"not null pk autoincr INT(10)"`
 	name        string    `xorm:"not null comment('分类名') VARCHAR(255)"`
 	password    string    `xorm:"not null"`

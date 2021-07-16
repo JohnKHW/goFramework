@@ -2,7 +2,10 @@ package controllers
 
 import "github.com/gin-gonic/gin"
 
-type Controller interface {
+type IController interface {
+}
+
+type IResourceController interface {
 	Index(*gin.Context)
 	Create(*gin.Context)
 	Store(*gin.Context)
@@ -12,7 +15,7 @@ type Controller interface {
 	Destroy(*gin.Context)
 }
 
-func ResourceController(g *gin.RouterGroup, c Controller) {
+func ResourceController(g *gin.RouterGroup, c IResourceController) {
 	//Index
 	g.GET("/", c.Index)
 	//Create New
