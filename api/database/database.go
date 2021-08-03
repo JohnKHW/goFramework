@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+var dbDriver string = "pqsql"
 var dbHost string = "localhost"
 var dbUser string = "root"
 var dbPassword string = ""
@@ -17,26 +18,13 @@ var dbName string = ""
 type IDriver interface {
 	DriverDialector() gorm.Dialector
 }
-
-type IPGSQLDriver interface {
-	IDriver
-}
 type PGSQLDriver struct {
-}
-
-type IMYSQLDriver interface {
 	IDriver
 }
 type MYSQLDriver struct {
-}
-
-type ISQLIDriver interface {
 	IDriver
 }
 type SQLIDriver struct {
-}
-
-type ISQLSDriver interface {
 	IDriver
 }
 type SQLSDriver struct {
@@ -44,11 +32,11 @@ type SQLSDriver struct {
 
 func GetDriver(driver string) IDriver {
 	switch driver {
-	case "postgres":
+	case "postgres", "pgsql":
 		return &PGSQLDriver{}
-	case "sqlite":
+	case "sqlite", "sqli":
 		return &SQLIDriver{}
-	case "sqlserver":
+	case "sqlserver", "mssql":
 		return &SQLSDriver{}
 	default:
 		return &MYSQLDriver{}
@@ -86,6 +74,6 @@ func (SQLSDriver) DriverDialector() gorm.Dialector {
 }
 
 func DBInit() (*gorm.DB, error) {
-	db, err := gorm.Open(GetDriver("").DriverDialector(), &gorm.Config{})
+	db, err := gorm.Open(GetDriver("dbDriver").DriverDialector(), &gorm.Config{})
 	return db, err
 }
