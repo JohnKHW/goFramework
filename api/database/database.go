@@ -30,19 +30,6 @@ type SQLIDriver struct {
 type SQLSDriver struct {
 }
 
-func GetDriver(driver string) IDriver {
-	switch driver {
-	case "postgres", "pgsql":
-		return &PGSQLDriver{}
-	case "sqlite", "sqli":
-		return &SQLIDriver{}
-	case "sqlserver", "mssql":
-		return &SQLSDriver{}
-	default:
-		return &MYSQLDriver{}
-	}
-}
-
 func (PGSQLDriver) DriverDialector() gorm.Dialector {
 	dsn := "user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
 	return postgres.New(postgres.Config{
@@ -71,6 +58,19 @@ func (SQLIDriver) DriverDialector() gorm.Dialector {
 func (SQLSDriver) DriverDialector() gorm.Dialector {
 	dsn := "sqlserver://gorm:LoremIpsum86@localhost:9930?database=gorm"
 	return sqlserver.Open(dsn)
+}
+
+func GetDriver(driver string) IDriver {
+	switch driver {
+	case "postgres", "pgsql":
+		return &PGSQLDriver{}
+	case "sqlite", "sqli":
+		return &SQLIDriver{}
+	case "sqlserver", "mssql":
+		return &SQLSDriver{}
+	default:
+		return &MYSQLDriver{}
+	}
 }
 
 func DBInit() (*gorm.DB, error) {
